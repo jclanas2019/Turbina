@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% import "widgets.html" as widgets %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-100 px-10">
+  <div class="flex flex-col md:flex-row justify-center items-stretch gap-12">
+
+    <!-- Testimonio apaisado -->
+    <div class="flex flex-col justify-center p-12 bg-indigo-50 h-full rounded-xl shadow-lg">
+      <div class="flex items-center space-x-4 mb-6">
+        <img class="h-8" src="https://tailwindcss.com/plus-assets/img/logos/workcation-logo-indigo-600.svg" alt="Logo">
+        <span class="text-lg font-semibold text-gray-700">Lo que dicen nuestros clientes</span>
+      </div>
+
+      <blockquote>
+        <p id="testimonial-text" class="text-xl font-medium text-gray-900 leading-relaxed transition duration-500 ease-in-out">
+          "Turbina nos dio el control total de nuestras operaciones. Simple, rápido y confiable."
+        </p>
+      </blockquote>
+
+      <figcaption class="mt-6 flex items-center space-x-4">
+        <img id="testimonial-img" class="w-12 h-12 rounded-full border-2 border-indigo-500 shadow-lg" 
+             src="https://randomuser.me/api/portraits/women/44.jpg" alt="Testimonio">
+        <div>
+          <div id="testimonial-name" class="text-lg font-semibold text-gray-900">Judith Black</div>
+          <div id="testimonial-role" class="text-gray-600 text-sm">CEO de Workcation</div>
+        </div>
+      </figcaption>
+    </div>
+
+    <!-- Login en formato caja estándar -->
+    <div class="flex flex-col justify-center p-12 w-full bg-white rounded-xl shadow-lg md:w-200">
+      <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">
+        Bienvenido a <span class="text-indigo-600">Turbina</span>
+      </h2>
+
+      {% if error %}
+        <div class="bg-red-100 text-red-700 text-sm px-4 py-2 rounded-lg mb-5 text-center font-semibold border border-red-300">
+          {{ error }}
+        </div>
+      {% endif %}
+
+      <form method="post" class="space-y-6">
+        <div>
+          <label for="username" class="block text-sm font-semibold text-gray-700">Usuario</label>
+          <input id="username" name="username" type="text" value="{{ username or '' }}"
+                 class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-md"
+                 placeholder="Ingresa tu usuario">
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm font-semibold text-gray-700">Contraseña</label>
+          <input id="password" name="password" type="password"
+                 class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-md"
+                 placeholder="Ingresa tu contraseña">
+        </div>
+
+        <div class="flex items-center justify-between text-sm">
+          <label class="flex items-center gap-2">
+            <input type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
+            <span class="text-gray-700">Recuérdame</span>
+          </label>
+          <a href="#" class="text-indigo-600 font-semibold hover:underline">¿Olvidaste tu clave?</a>
+        </div>
+
+        <button type="submit"
+                class="w-full py-3 px-6 bg-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-700 transition text-center text-lg">
+          Iniciar sesión
+        </button>
+      </form>
+
+      <p class="text-sm text-center text-gray-500 mt-6">
+        ¿No tienes una cuenta?
+        <a href="#" class="text-indigo-600 font-semibold hover:underline">Regístrate</a>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// Testimonios dinámicos con inicio aleatorio
+const testimonios = [
+  {
+    text: ""Turbina nos dio el control total de nuestras operaciones. Simple, rápido y confiable."",
+    img: "https://randomuser.me/api/portraits/women/44.jpg",
+    name: "Judith Black",
+    role: "CEO de Workcation"
+  },
+  {
+    text: ""Desde que usamos Turbina, la trazabilidad es automática. El equipo feliz."",
+    img: "https://randomuser.me/api/portraits/men/45.jpg",
+    name: "Carlos Sánchez",
+    role: "CTO de FreshLogix"
+  },
+  {
+    text: ""La implementación fue rapidísima. En días ya estábamos operando."",
+    img: "https://randomuser.me/api/portraits/women/65.jpg",
+    name: "María Estévez",
+    role: "Gerente de Operaciones"
+  }
+];
+
+let index = Math.floor(Math.random() * testimonios.length);
+document.getElementById("testimonial-text").textContent = testimonios[index].text;
+document.getElementById("testimonial-img").src = testimonios[index].img;
+document.getElementById("testimonial-name").textContent = testimonios[index].name;
+document.getElementById("testimonial-role").textContent = testimonios[index].role;
+
+setInterval(() => {
+  index = (index + 1) % testimonios.length;
+  const t = testimonios[index];
+  document.getElementById("testimonial-text").textContent = t.text;
+  document.getElementById("testimonial-img").src = t.img;
+  document.getElementById("testimonial-name").textContent = t.name;
+  document.getElementById("testimonial-role").textContent = t.role;
+}, 6000);
+</script>
+{% endblock %}

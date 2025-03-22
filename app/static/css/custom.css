@@ -1,0 +1,52 @@
+/* Asegurar que todo tenga fondo claro */
+body {
+    background-color: #f5f6fa !important;
+    color: #212529 !important;
+}
+
+/* Menú lateral con mejor apariencia */
+.menu {
+    background: #0073e6 !important;
+}
+
+/* Mejor estilo para formularios */
+.input {
+    background-color: #ffffff !important;
+    border: 1px solid #ced4da !important;
+}
+
+/* Asegurar que los placeholders sean grises */
+.input::placeholder {
+    color: #6c757d !important;
+}
+
+/* Botones */
+.button {
+    border-radius: 6px !important;
+}
+
+.button.is-primary {
+    background-color: #0073e6 !important;
+    border-color: #0073e6 !important;
+    color: white !important;
+}
+
+.button.is-primary:hover {
+    background-color: #005bb5 !important;
+    border-color: #004494 !important;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out both;
+}

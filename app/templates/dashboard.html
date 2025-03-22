@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% import "widgets.html" as widgets %}
+{% block content %}
+
+<!-- Widgets -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    {% for stat in stats %}
+        {{ widgets.widget_card(stat.icon, stat.title, stat.value, stat.color) }}
+    {% endfor %}
+</div>
+
+<!-- Workflow -->
+<div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">🔄 Workflow</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {% for step in workflow_steps %}
+            {{ widgets.workflow_step(step) }}
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Calendario -->
+<div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">📅 Calendario</h2>
+    <div id="calendar"></div>
+    {{ widgets.calendar_widget() }}
+</div>
+
+<!-- Tabla de órdenes -->
+<div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">📋 Órdenes Recientes</h2>
+    <div class="overflow-x-auto">
+        <table class="w-full border border-gray-300 rounded-lg">
+            <thead class="bg-gray-100 text-gray-800">
+                <tr>
+                    <th class="px-4 py-2 text-left">Pedido</th>
+                    <th class="px-4 py-2 text-left">Cliente</th>
+                    <th class="px-4 py-2 text-left">Monto</th>
+                    <th class="px-4 py-2 text-left">Estado</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700">
+                {% for order in orders %}
+                    {{ widgets.order_row(order) }}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Lista de tareas -->
+<div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">📝 Lista de Tareas</h2>
+    <ul class="space-y-3">
+        {% for task in tasks %}
+            {{ widgets.task_item(task) }}
+        {% endfor %}
+    </ul>
+</div>
+
+<script src="/static/js/dashboard.js"></script>
+
+{% endblock %}

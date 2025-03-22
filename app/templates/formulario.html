@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mx-auto px-6 py-8 max-w-3xl">
+  <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ title }}</h1>
+  <p class="text-gray-600 mb-6">{{ message }}</p>
+
+  <!-- Formulario multipaso con Alpine -->
+  <form method="post" x-data="{ paso: 1 }" class="bg-white shadow-md rounded-lg p-6 space-y-6">
+
+    <!-- Indicador de pasos -->
+    <div class="flex items-center justify-between mb-4">
+      <template x-for="i in 3">
+        <div class="flex-1 flex items-center">
+          <div
+            class="w-8 h-8 rounded-full flex items-center justify-center"
+            :class="paso >= i ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'"
+            x-text="i"
+          ></div>
+          <div class="flex-1 h-1 mx-2 bg-gray-300" :class="paso > i ? 'bg-blue-600' : ''"></div>
+        </div>
+      </template>
+    </div>
+
+    <!-- Paso 1: Datos Personales -->
+    <div x-show="paso === 1" x-transition>
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">👤 Datos Personales</h2>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Nombre</label>
+        <input type="text" name="nombre" value="{{ form_data.nombre }}" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500">
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+        <input type="email" name="email" value="{{ form_data.email }}" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500">
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Género</label>
+        <div class="flex space-x-4 mt-1">
+          <label class="inline-flex items-center">
+            <input type="radio" name="genero" value="masculino" {% if form_data.genero == "masculino" %}checked{% endif %} class="form-radio text-blue-600">
+            <span class="ml-2">Masculino</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="radio" name="genero" value="femenino" {% if form_data.genero == "femenino" %}checked{% endif %} class="form-radio text-blue-600">
+            <span class="ml-2">Femenino</span>
+          </label>
+          <label class="inline-flex items-center">
+            <input type="radio" name="genero" value="otro" {% if form_data.genero == "otro" %}checked{% endif %} class="form-radio text-blue-600">
+            <span class="ml-2">Otro</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paso 2: Cuenta -->
+    <div x-show="paso === 2" x-transition>
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">🔐 Cuenta</h2>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+        <input type="password" name="password" value="{{ form_data.password }}" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500">
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Rol</label>
+        <select name="rol" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500">
+          <option value="">Selecciona un rol</option>
+          <option value="admin" {% if form_data.rol == "admin" %}selected{% endif %}>Administrador</option>
+          <option value="editor" {% if form_data.rol == "editor" %}selected{% endif %}>Editor</option>
+          <option value="viewer" {% if form_data.rol == "viewer" %}selected{% endif %}>Visualizador</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Paso 3: Confirmación -->
+    <div x-show="paso === 3" x-transition>
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">✅ Confirmación</h2>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700">Comentarios</label>
+        <textarea name="comentarios" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500">{{ form_data.comentarios }}</textarea>
+      </div>
+
+      <div class="flex items-start">
+        <input type="checkbox" name="terminos" {% if form_data.terminos %}checked{% endif %} class="form-checkbox text-blue-600 mt-1">
+        <label class="ml-2 text-sm text-gray-700">Acepto los términos y condiciones</label>
+      </div>
+    </div>
+
+    <!-- Navegación entre pasos -->
+    <div class="flex justify-between pt-4">
+      <button type="button" @click="paso--" x-show="paso > 1" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400 transition">
+        ← Anterior
+      </button>
+      <button type="button" @click="paso++" x-show="paso < 3" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+        Siguiente →
+      </button>
+      <button type="submit" x-show="paso === 3" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition">
+        Enviar Formulario
+      </button>
+    </div>
+
+  </form>
+</div>
+
+{% endblock %}

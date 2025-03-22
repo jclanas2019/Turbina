@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-8">
+    
+    <!-- Encabezado -->
+    <h1 class="text-3xl font-bold text-gray-800">Gestión de Usuarios</h1>
+    <p class="text-gray-600">Bienvenido al sistema de gestión de usuarios.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        
+        <!-- Formulario de creación -->
+        <div class="bg-white shadow-lg rounded-lg p-6">
+            <h2 class="text-lg font-semibold text-gray-700">Crear Usuario</h2>
+            
+            <form class="space-y-4 mt-4">
+                <input type="text" placeholder="Nombre" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="email" placeholder="Email" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="password" placeholder="Contraseña" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button class="bg-blue-600 text-white p-2 rounded-md w-full hover:bg-blue-700 transition">
+                    Crear Usuario
+                </button>
+            </form>
+        </div>
+
+        <!-- Tabla de usuarios -->
+        <div class="bg-white shadow-lg rounded-lg p-6">
+            <h2 class="text-lg font-semibold text-gray-700">Tabla de Usuarios</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse border border-gray-300 mt-4">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="border border-gray-300 px-4 py-2">Nombre</th>
+                            <th class="border border-gray-300 px-4 py-2">Email</th>
+                            <th class="border border-gray-300 px-4 py-2">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in usuarios %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="border border-gray-300 px-4 py-2">{{ usuario.nombre }}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{ usuario.email }}</td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a href="/usuarios/{{ usuario.id }}/editar" class="bg-blue-500 text-white px-2 py-1 rounded-md text-sm hover:bg-blue-600 transition">Editar</a>
+                                <a href="/usuarios/{{ usuario.id }}/eliminar" class="bg-red-500 text-white px-2 py-1 rounded-md text-sm hover:bg-red-600 transition">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

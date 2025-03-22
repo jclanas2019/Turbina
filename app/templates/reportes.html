@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% import 'widgets.html' as widgets %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-8">
+  <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ title }}</h1>
+  <p class="text-gray-600 mb-6">{{ message }}</p>
+
+  <!-- Tabs con Alpine.js -->
+  <div x-data="{ tab: 'ventas' }" class="mb-6">
+    <div class="flex space-x-4 border-b border-gray-300">
+      <button @click="tab = 'ventas'" :class="{ 'border-b-2 border-blue-600 text-blue-600': tab === 'ventas' }" class="py-2 px-4 font-semibold text-gray-700 hover:text-blue-600">
+        📈 Ventas
+      </button>
+      <button @click="tab = 'clientes'" :class="{ 'border-b-2 border-blue-600 text-blue-600': tab === 'clientes' }" class="py-2 px-4 font-semibold text-gray-700 hover:text-blue-600">
+        👥 Clientes
+      </button>
+      <button @click="tab = 'productos'" :class="{ 'border-b-2 border-blue-600 text-blue-600': tab === 'productos' }" class="py-2 px-4 font-semibold text-gray-700 hover:text-blue-600">
+        📦 Productos
+      </button>
+    </div>
+
+    <!-- Ventas -->
+    <div x-show="tab === 'ventas'" x-transition class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for r in reportes_ventas %}
+        {{ widgets.reporte_card(r.icon, r.titulo, r.valor, r.color) }}
+      {% endfor %}
+    </div>
+
+    <!-- Clientes -->
+    <div x-show="tab === 'clientes'" x-transition class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for r in reportes_clientes %}
+        {{ widgets.reporte_card(r.icon, r.titulo, r.valor, r.color) }}
+      {% endfor %}
+    </div>
+
+    <!-- Productos -->
+    <div x-show="tab === 'productos'" x-transition class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for r in reportes_productos %}
+        {{ widgets.reporte_card(r.icon, r.titulo, r.valor, r.color) }}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

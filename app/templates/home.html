@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if message %}
+<article class="message is-success">
+  <div class="message-body">{{ message }}</div>
+</article>
+{% endif %}
+
+<!-- Formulario de subida de imagen -->
+<div class="box" x-data="{ fileName: '', previewUrl: '' }">
+    <h2 class="subtitle">📷 Subir imagen</h2>
+    <form method="post" action="/upload" enctype="multipart/form-data">
+        <div class="field">
+            <div class="file has-name is-boxed is-info">
+                <label class="file-label">
+                    <input class="file-input" type="file" name="file"
+                           @change="fileName = $event.target.files[0].name;
+                                    previewUrl = URL.createObjectURL($event.target.files[0])">
+                    <span class="file-cta">
+                        <span class="file-icon">📁</span>
+                        <span class="file-label">Seleccionar imagen</span>
+                    </span>
+                    <span class="file-name" x-text="fileName || 'Ningún archivo seleccionado'"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="field mt-4" x-show="previewUrl">
+            <label class="label">Previsualización:</label>
+            <figure class="image is-128x128">
+                <img :src="previewUrl" alt="Vista previa" class="is-rounded">
+            </figure>
+        </div>
+
+        <div class="field mt-4">
+            <button class="button is-primary">Subir imagen</button>
+        </div>
+    </form>
+</div>
+
+<!-- Mostrar imagen subida (opcional) -->
+{% if image_url %}
+<div class="box">
+    <h2 class="subtitle">🖼 Imagen subida</h2>
+    <figure class="image">
+        <img src="{{ image_url }}" alt="Imagen subida">
+    </figure>
+</div>
+{% endif %}
+
+{% endblock %}
