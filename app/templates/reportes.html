@@ -4,7 +4,14 @@
 {% block content %}
 <div class="container mx-auto px-6 py-8">
   <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ title }}</h1>
-  <p class="text-gray-600 mb-6">{{ message }}</p>
+  <p class="text-gray-600 mb-2">{{ message }}</p>
+
+  <!-- Contador de reportes para depuración -->
+  <p class="text-sm text-gray-400 mb-6">
+    Ventas: {{ reportes_ventas|length }},
+    Clientes: {{ reportes_clientes|length }},
+    Productos: {{ reportes_productos|length }}
+  </p>
 
   <!-- Tabs con Alpine.js -->
   <div x-data="{ tab: 'ventas' }" class="mb-6">
@@ -22,23 +29,35 @@
 
     <!-- Ventas -->
     <div x-show="tab === 'ventas'" x-transition class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {% for r in reportes_ventas %}
-        {{ widgets.reporte_card(r.icon, r.titulo, r.valor, r.color) }}
-      {% endfor %}
+      {% if reportes_ventas %}
+        {% for r in reportes_ventas %}
+          {{ widgets.reporte_card(r.icon, r.titulo, r.valor, r.color) }}
+        {% endfor %}
+      {% else %}
+        <p class="text-gray-500 col-span-full">No hay reportes de ventas.</p>
+      {% endif %}
     </div>
 
     <!-- Clientes -->
     <div x-show="tab === 'clientes'" x-transition class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {% for r in reportes_clientes %}
-        {{ widgets.reporte_card(r.icon, r.titulo, r.valor, r.color) }}
-      {% endfor %}
+      {% if reportes_clientes %}
+        {% for r in reportes_clientes %}
+          {{ widgets.reporte_card(r.icon, r.titulo, r.valor, r.color) }}
+        {% endfor %}
+      {% else %}
+        <p class="text-gray-500 col-span-full">No hay reportes de clientes.</p>
+      {% endif %}
     </div>
 
     <!-- Productos -->
     <div x-show="tab === 'productos'" x-transition class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {% for r in reportes_productos %}
-        {{ widgets.reporte_card(r.icon, r.titulo, r.valor, r.color) }}
-      {% endfor %}
+      {% if reportes_productos %}
+        {% for r in reportes_productos %}
+          {{ widgets.reporte_card(r.icon, r.titulo, r.valor, r.color) }}
+        {% endfor %}
+      {% else %}
+        <p class="text-gray-500 col-span-full">No hay reportes de productos.</p>
+      {% endif %}
     </div>
   </div>
 </div>

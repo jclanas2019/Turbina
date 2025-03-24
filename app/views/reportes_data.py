@@ -1,23 +1,35 @@
+from app.core.database import SessionLocal
+from app.models.report import Report
+
 def get_context():
+    db = SessionLocal()
+    reportes = db.query(Report).all()
+    db.close()
+
+    print(f"[DEBUG] Total reportes: {len(reportes)}")  # Verifica en consola
+
+    ventas, clientes, productos = [], [], []
+
+    for r in reportes:
+        item = {
+            "icon": r.icon,
+            "titulo": r.titulo,
+            "valor": r.valor,
+            "color": r.color
+        }
+        if r.categoria.lower() == "ventas":
+            ventas.append(item)
+        elif r.categoria.lower() == "clientes":
+            clientes.append(item)
+        elif r.categoria.lower() == "productos":
+            productos.append(item)
+
+    print(f"[DEBUG] Ventas: {len(ventas)} | Clientes: {len(clientes)} | Productos: {len(productos)}")
+
     return {
         "title": "Reportes",
         "message": "Visualiza los indicadores clave de cada sección.",
-
-        "reportes_ventas": [
-            {"icon": "💰", "titulo": "Ingresos", "valor": "$25.000", "color": "green"},
-            {"icon": "📉", "titulo": "Devoluciones", "valor": "$2.300", "color": "red"},
-            {"icon": "📊", "titulo": "Crecimiento", "valor": "12%", "color": "blue"},
-        ],
-
-        "reportes_clientes": [
-            {"icon": "👥", "titulo": "Nuevos Clientes", "valor": "120", "color": "blue"},
-            {"icon": "📞", "titulo": "Contactos Activos", "valor": "87", "color": "purple"},
-            {"icon": "🔁", "titulo": "Clientes Recurrentes", "valor": "34", "color": "green"},
-        ],
-
-        "reportes_productos": [
-            {"icon": "📦", "titulo": "Stock Bajo", "valor": "14 ítems", "color": "yellow"},
-            {"icon": "🔥", "titulo": "Más Vendidos", "valor": "5 productos", "color": "orange"},
-            {"icon": "⭐", "titulo": "Promedio de Reviews", "valor": "4.5 ★", "color": "teal"},
-        ]
+        "reportes_ventas": ventas,
+        "reportes_clientes": clientes,
+        "reportes_productos": productos,
     }
