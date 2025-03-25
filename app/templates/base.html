@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -21,9 +21,10 @@
 
 <body class="bg-gray-100 text-gray-900 flex {% if request.url.path == '/login' %}justify-center items-center h-screen{% endif %}">
 
-    {% if request.url.path != "/login" %}
-    <!-- Menú lateral (se oculta en login) -->
-    <aside class="w-64 bg-blue-700 text-white h-screen p-5 shadow-lg fixed">
+{% if request.url.path != "/login" %}
+<!-- Menú lateral (se oculta en login) -->
+<aside class="w-64 bg-blue-700 text-white h-screen p-5 shadow-lg fixed flex flex-col justify-between">
+    <div>
         <h1 class="text-lg font-semibold mb-4">NAVIGATION</h1>
         <ul class="space-y-2">
             <li><a href="/" class="block px-4 py-2 rounded-md hover:bg-blue-500">📊 Dashboard</a></li>
@@ -32,16 +33,25 @@
             <li><a href="/formulario" class="block px-4 py-2 rounded-md hover:bg-blue-500">📝 Formulario</a></li>
             <li><a href="/usuarios" class="block px-4 py-2 rounded-md hover:bg-blue-500">👥 Usuarios</a></li>
         </ul>
-    </aside>
-    {% endif %}
-
-    <!-- Contenido principal -->
-    <main class="{% if request.url.path == '/login' %}w-full max-w-md{% else %}ml-64 p-8 w-full{% endif %}">
-        <div class="container mx-auto">
-            {% block content %}{% endblock %}
+    </div>
+    <div class="text-sm mt-8">
+        {% if request.cookies.usuario %}
+        <div class="border-t border-blue-600 pt-4">
+            👤 <strong>{{ request.cookies.usuario }}</strong><br>
+            <a href="/logout" class="text-blue-200 hover:text-white underline">Cerrar sesión</a>
         </div>
-    </main>
+        {% endif %}
+    </div>
+</aside>
+{% endif %}
 
-    <script src="/static/js/dashboard.js"></script>
+<!-- Contenido principal -->
+<main class="{% if request.url.path == '/login' %}w-full max-w-md{% else %}ml-64 p-8 w-full{% endif %}">
+    <div class="container mx-auto">
+        {% block content %}{% endblock %}
+    </div>
+</main>
+
+<script src="/static/js/dashboard.js"></script>
 </body>
 </html>

@@ -1,21 +1,25 @@
+import os
 from fastapi import APIRouter, Request, Form
-from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
-
+from fastapi.responses import RedirectResponse, HTMLResponse
+from app.core.auth import verificar_login
 from app.views import formulario_data
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
 
-
-@router.get("/formulario")
+@router.get("/formulario", response_class=HTMLResponse)
 async def get_formulario(request: Request):
+    redirect = await verificar_login(request)
+    if redirect:
+        return redirect
+
     context = formulario_data.get_context()
     context["request"] = request
+    context["usuario"] = request.cookies.get("usuario")
     return templates.TemplateResponse("formulario.html", context)
 
-
-@router.post("/formulario")
+@router.post("/formulario", response_class=HTMLResponse)
 async def post_formulario(
     request: Request,
     nombre: str = Form(...),
@@ -26,7 +30,10 @@ async def post_formulario(
     terminos: bool = Form(False),
     comentarios: str = Form("")
 ):
-    # Aquí puedes hacer validaciones o guardar en base de datos
+    redirect = await verificar_login(request)
+    if redirect:
+        return redirect
+
     print("✅ Formulario recibido:", {
         "nombre": nombre,
         "email": email,
@@ -37,6 +44,5 @@ async def post_formulario(
         "comentarios": comentarios
     })
 
-    # Redirige al mismo formulario con mensaje de éxito (podrías renderizar otra vista si prefieres)
     response = RedirectResponse(url="/formulario", status_code=303)
     return response

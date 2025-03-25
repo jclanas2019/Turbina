@@ -1,16 +1,23 @@
+from app.core.database import SessionLocal, Base, engine
+from app.models.venta import Venta
+
+Base.metadata.create_all(bind=engine)
+
 def get_context():
+    db = SessionLocal()
+    ventas = db.query(Venta).all()
+    db.close()
+
+    resumen = [
+        {"icon": "🧾", "title": "Total Ventas", "value": f"${sum(v.monto for v in ventas):,.0f}", "color": "green"},
+        {"icon": "👤", "title": "Clientes", "value": f"{len(set(v.cliente for v in ventas))}", "color": "blue"},
+        {"icon": "📦", "title": "Productos", "value": f"{len(set(v.producto for v in ventas))}", "color": "yellow"},
+        {"icon": "📊", "title": "Pendientes", "value": f"{sum(1 for v in ventas if v.estado.lower() == 'pendiente')}", "color": "red"},
+    ]
+
     return {
-        "title": "Panel de Ventas",
-        "message": "Resumen de las ventas más recientes y su evolución.",
-        "resumen": [
-            {"icon": "💰", "title": "Total Ventas", "value": "$98.000", "color": "green"},
-            {"icon": "🛒", "title": "Órdenes", "value": "320", "color": "blue"},
-            {"icon": "📈", "title": "Promedio", "value": "$306", "color": "teal"},
-            {"icon": "📦", "title": "Productos", "value": "87", "color": "orange"},
-        ],
-        "ventas": [
-            {"id": 101, "cliente": "Juan Pérez", "producto": "Laptop", "monto": 850, "estado": "Pagado", "color": "green"},
-            {"id": 102, "cliente": "Ana Díaz", "producto": "Teclado", "monto": 45, "estado": "Pendiente", "color": "yellow"},
-            {"id": 103, "cliente": "Carlos Ruiz", "producto": "Monitor", "monto": 220, "estado": "Cancelado", "color": "red"},
-        ]
+        "title": "Ventas",
+        "message": "Revisa el estado y resumen de las ventas registradas.",
+        "resumen": resumen,
+        "ventas": ventas,
     }
